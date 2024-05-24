@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import "./database/connection.js";
+import ProductCollection from "./database/Product.js";
 
 const app = express();
 
@@ -13,6 +15,13 @@ app.post("/products", async (request, response) => {
   if (!name || !description || typeof price !== "number") {
     return response.status(400).json({ message: "Invalid request body" });
   }
+  const newProduct = new ProductCollection({
+    name,
+    price,
+    description,
+  });
+  await newProduct.save();
+  return response.status(201).json({ newProduct });
 });
 
 // Read
@@ -27,3 +36,5 @@ app.put("/products/:id", async (request, response) => {});
 app.delete("/products/:id", async (request, response) => {});
 
 app.listen(3000, () => console.log("Server listening on port 3000"));
+
+// yX2Un5pykobjainV
